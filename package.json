@@ -13,21 +13,62 @@
                     "dev":  "nodemon src/index.js"
                 },
     "devDependencies":  {
-                            "@playwright/test":  "^1.44.0",
-                            "commander":  "^9.5.0",
-                            "openapi-typescript":  "^7.6.1",
-                            "@commitlint/cli":  "^18.5.0",
-                            "ts-node":  "^10.9.2",
-                            "coveralls":  "^3.1.1",
-                            "@commitlint/config-conventional":  "^18.5.0",
-                            "husky":  "^9.0.11",
-                            "node-fetch":  "^2.7.0",
-                            "commitizen":  "^4.3.0",
-                            "cz-conventional-changelog":  "^3.3.0"
+                            "IsFixedSize":  false,
+                            "Count":  12,
+                            "IsSynchronized":  false,
+                            "IsReadOnly":  false,
+                            "Keys":  [
+                                         "@playwright/test",
+                                         "commander",
+                                         "openapi-typescript",
+                                         "@commitlint/cli",
+                                         "swagger-jsdoc",
+                                         "cz-conventional-changelog",
+                                         "coveralls",
+                                         "@commitlint/config-conventional",
+                                         "husky",
+                                         "node-fetch",
+                                         "commitizen",
+                                         "ts-node"
+                                     ],
+                            "Values":  [
+                                           "^1.44.0",
+                                           "^9.5.0",
+                                           "^7.6.1",
+                                           "^18.5.0",
+                                           "^6.2.8",
+                                           "^3.3.0",
+                                           "^3.1.1",
+                                           "^18.5.0",
+                                           "^9.0.11",
+                                           "^2.7.0",
+                                           "^4.3.0",
+                                           "^10.9.2"
+                                       ],
+                            "SyncRoot":  {
+
+                                         }
                         },
     "config":  {
                    "commitizen":  {
                                       "path":  "cz-conventional-changelog"
                                   }
-               }
+               },
+    "dependencies":  {
+                         "IsFixedSize":  false,
+                         "swagger-ui-express":  "^5.0.0",
+                         "Count":  0,
+                         "IsSynchronized":  false,
+                         "IsReadOnly":  false,
+                         "Keys":  [
+
+                                  ],
+                         "Values":  [
+
+                                    ],
+                         "swagger-jsdoc":  "^6.2.8",
+                         "SyncRoot":  {
+
+                                      }
+                     }
 }

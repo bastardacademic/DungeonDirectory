@@ -1,18 +1,33 @@
-{
-    "name": "bound",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-        "dev": "svelte-kit dev",
-        "build": "svelte-kit build",
-        "preview": "svelte-kit preview",
-        "generateSdk": "openapi-typescript openapi.json --output src/lib/sdk/openapi.ts"
-    },
-    "devDependencies": {
-        "commander": "^9.5.0",
-        "husky": "^9.1.7",
-        "node-fetch": "^2.7.0",
-        "openapi-typescript": "^7.6.1",
-        "ts-node": "^10.9.2"
-    }
+﻿{
+    "name":  "bound",
+    "version":  "1.0.0",
+    "private":  true,
+    "scripts":  {
+                    "preview":  "svelte-kit preview",
+                    "coverage":  "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+                    "build":  "svelte-kit build",
+                    "e2e":  "playwright test",
+                    "test:ci":  "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand --detectOpenHandles",
+                    "generateSdk":  "openapi-typescript openapi.json --output src/lib/sdk/openapi.ts",
+                    "postinstall":  "husky install",
+                    "dev":  "nodemon src/index.js"
+                },
+    "devDependencies":  {
+                            "@playwright/test":  "^1.44.0",
+                            "commander":  "^9.5.0",
+                            "openapi-typescript":  "^7.6.1",
+                            "@commitlint/cli":  "^18.5.0",
+                            "ts-node":  "^10.9.2",
+                            "coveralls":  "^3.1.1",
+                            "@commitlint/config-conventional":  "^18.5.0",
+                            "husky":  "^9.0.11",
+                            "node-fetch":  "^2.7.0",
+                            "commitizen":  "^4.3.0",
+                            "cz-conventional-changelog":  "^3.3.0"
+                        },
+    "config":  {
+                   "commitizen":  {
+                                      "path":  "cz-conventional-changelog"
+                                  }
+               }
 }

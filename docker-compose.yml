@@ -2,6 +2,7 @@
 
 services:
   api:
+    profiles: ["dev", "prod"]
     build: .
     command: npm run dev
     volumes:
@@ -12,10 +13,18 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/status"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
 
   db:
+    profiles: ["dev", "test", "prod"]
     image: postgres:15-alpine
     restart: always
     environment:
@@ -26,12 +35,30 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
 
   redis:
+    profiles: ["dev", "test", "prod"]
     image: redis:7-alpine
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    profiles: ["dev"]
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - "8025:8025"
 
 volumes:
   postgres_data:

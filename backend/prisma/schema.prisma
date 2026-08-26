@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  GUEST
+  HOST
+  ADMIN
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  roles        Role[]        @default([GUEST])
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Property {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String
+  location     String
+  price        Float
+  availability Boolean
+  owner        User          @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Reservation {
+  id         Int      @id @default(autoincrement())
+  startDate  DateTime
+  endDate    DateTime
+  property   Property @relation(fields: [propertyId], references: [id])
+  propertyId Int
+  guest      User     @relation(fields: [guestId], references: [id])
+  guestId    Int
+  duration   Int // Duration in hours
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

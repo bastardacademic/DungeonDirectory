@@ -3,10 +3,10 @@
 services:
   api:
     profiles: ["dev", "prod"]
-    build: .
+    build: ./backend
     command: npm run dev
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - "3000:3000"

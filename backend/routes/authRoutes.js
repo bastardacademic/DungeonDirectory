@@ -1,32 +1,35 @@
-﻿const express = require('express');
-const { loginUser, registerUser } = require('../controllers/authController');
+const express = require('express');
 const { body, validationResult } = require('express-validator');
+const { loginUser, registerUser } = require('../controllers/authController');
+const { setupTotp, verifyTotp, disableTotp } = require('../controllers/twoFactorController');
+const authMiddleware = require('../middlewares/authMiddleware');
+
 const router = express.Router();
 
-router.post(
-    '/login',
-    [body('email').isEmail(), body('password').isLength({ min: 6 })],
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    },
-    loginUser
-);
+const handleValidation = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+};
 
 router.post(
     '/register',
     [body('email').isEmail(), body('password').isLength({ min: 6 })],
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    },
+    handleValidation,
     registerUser
 );
+
+router.post(
+    '/login',
+    [body('email').isEmail(), body('password').notEmpty()],
+    handleValidation,
+    loginUser
+);
+
+router.post('/2fa/setup', authMiddleware, setupTotp);
+router.post('/2fa/verify', authMiddleware, [body('totpCode').notEmpty()], handleValidation, verifyTotp);
+router.post('/2fa/disable', authMiddleware, [body('password').notEmpty()], handleValidation, disableTotp);
 
 module.exports = router;

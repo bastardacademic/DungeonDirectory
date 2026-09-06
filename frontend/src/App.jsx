@@ -5,6 +5,8 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import CreatePropertyPage from "./pages/CreatePropertyPage";
 import TwoFactorSetupPage from "./pages/TwoFactorSetupPage";
+import BookPropertyPage from "./pages/BookPropertyPage";
+import ReservationsPage from "./pages/ReservationsPage";
 
 export default function App() {
   return (
@@ -32,6 +34,22 @@ export default function App() {
         element={
           <ProtectedRoute>
             <TwoFactorSetupPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/properties/:id/book"
+        element={
+          <ProtectedRoute>
+            <BookPropertyPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reservations"
+        element={
+          <ProtectedRoute>
+            <ReservationsPage />
           </ProtectedRoute>
         }
       />

@@ -63,6 +63,9 @@ export default function DashboardPage() {
               <Button variant="primary">New listing</Button>
             </Link>
           )}
+          <Link to="/reservations">
+            <Button variant="ghost">My reservations</Button>
+          </Link>
           <Button variant="ghost" onClick={logout}>
             Log out
           </Button>
@@ -80,6 +83,11 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-600 dark:text-gray-300">{property.location}</p>
             <p className="mt-2 dark:text-gray-200">{property.description}</p>
             <p className="mt-2 font-medium dark:text-white">£{property.price}/night</p>
+            {property.ownerId !== user?.id && (
+              <Link to={`/properties/${property.id}/book`} className="inline-block mt-3">
+                <Button variant="primary">Book</Button>
+              </Link>
+            )}
           </Card>
         ))}
         {!loading && properties.length === 0 && (

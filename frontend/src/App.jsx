@@ -1,22 +1,41 @@
-import Button from "./components/ui/Button.jsx";
-import Card from "./components/ui/Card.jsx";
-import Input from "./components/ui/Input.jsx";
-import ColorSchemeToggle from "./components/ui/ColorSchemeToggle.jsx";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import CreatePropertyPage from "./pages/CreatePropertyPage";
+import TwoFactorSetupPage from "./pages/TwoFactorSetupPage";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold dark:text-white">Dungeon Directory</h1>
-        <ColorSchemeToggle />
-      </div>
-      <Card>
-        <Input placeholder="Search listings..." />
-        <div className="mt-4 flex gap-2">
-          <Button variant="primary">Search</Button>
-          <Button variant="ghost">Clear</Button>
-        </div>
-      </Card>
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/properties/new"
+        element={
+          <ProtectedRoute>
+            <CreatePropertyPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/2fa/setup"
+        element={
+          <ProtectedRoute>
+            <TwoFactorSetupPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

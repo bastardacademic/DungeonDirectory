@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const speakeasy = require('speakeasy');
 const prisma = require('../prismaClient');
 
+const signToken = (user) => jwt.sign({ id: user.id, roles: user.roles }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
 const registerUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -21,7 +23,7 @@ const registerUser = async (req, res) => {
             },
         });
 
-        const token = jwt.sign({ id: newUser.id, roles: newUser.roles }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = signToken(newUser);
 
         res.status(201).json({
             message: 'User registered successfully',
@@ -63,7 +65,7 @@ const loginUser = async (req, res) => {
             }
         }
 
-        const token = jwt.sign({ id: user.id, roles: user.roles }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = signToken(user);
 
         res.status(200).json({
             message: 'Login successful',
@@ -74,7 +76,42 @@ const loginUser = async (req, res) => {
     }
 };
 
+const upgradeToHost = async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.roles.includes('HOST')) {
+            return res.status(400).json({ message: 'You are already a host' });
+        }
+
+        if (!user.totpEnabled) {
+            return res.status(403).json({
+                message: 'Enable 2FA before becoming a host',
+                requires2FA: true,
+            });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: user.id },
+            data: { roles: { push: 'HOST' } },
+        });
+
+        const token = signToken(updatedUser);
+
+        res.status(200).json({
+            message: 'You are now a host',
+            token,
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
+    upgradeToHost,
 };

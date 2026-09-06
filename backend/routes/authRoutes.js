@@ -1,6 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { loginUser, registerUser } = require('../controllers/authController');
+const { loginUser, registerUser, upgradeToHost } = require('../controllers/authController');
 const { setupTotp, verifyTotp, disableTotp } = require('../controllers/twoFactorController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
@@ -31,5 +31,7 @@ router.post(
 router.post('/2fa/setup', authMiddleware, setupTotp);
 router.post('/2fa/verify', authMiddleware, [body('totpCode').notEmpty()], handleValidation, verifyTotp);
 router.post('/2fa/disable', authMiddleware, [body('password').notEmpty()], handleValidation, disableTotp);
+
+router.post('/upgrade-to-host', authMiddleware, upgradeToHost);
 
 module.exports = router;
